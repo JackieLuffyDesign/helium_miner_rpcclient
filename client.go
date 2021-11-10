@@ -2,6 +2,7 @@ package helium_miner_rpcclient
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -29,71 +30,71 @@ func New(endpoint string) *Client {
 	}
 }
 
-func (net p2p) Status() (*P2PStatus, error) {
+func (net p2p) Status(ctx context.Context) (*P2PStatus, error) {
 	var status P2PStatus
-	if err := makeRequest(net.endpoint, "info_p2p_status", nil, &status); err != nil {
+	if err := makeRequest(ctx, net.endpoint, "info_p2p_status", nil, &status); err != nil {
 		return nil, err
 	}
 	return &status, nil
 }
 
-func (info info) Height() (uint64, error) {
+func (info info) Height(ctx context.Context) (uint64, error) {
 	var height MinerHeight
-	if err := makeRequest(info.endpoint, "info_height", nil, &height); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_height", nil, &height); err != nil {
 		return 0, err
 	}
 	return height.Height, nil
 }
 
-func (info info) InConsensus() (*InConsensus, error) {
+func (info info) InConsensus(ctx context.Context) (*InConsensus, error) {
 	var ic InConsensus
-	if err := makeRequest(info.endpoint, "info_height", nil, &ic); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_height", nil, &ic); err != nil {
 		return nil, err
 	}
 	return &ic, nil
 }
 
-func (info info) Name() (*string, error) {
+func (info info) Name(ctx context.Context) (*string, error) {
 	var name Name
-	if err := makeRequest(info.endpoint, "info_name", nil, &name); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_name", nil, &name); err != nil {
 		return nil, err
 	}
 	return &name.Name, nil
 }
 
-func (info info) BlockAge() (uint64, error) {
+func (info info) BlockAge(ctx context.Context) (uint64, error) {
 	var blockAge BlockAge
-	if err := makeRequest(info.endpoint, "info_block_age", nil, &blockAge); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_block_age", nil, &blockAge); err != nil {
 		return 0, err
 	}
 	return blockAge.Age, nil
 }
 
-func (info info) Region() (*string, error) {
+func (info info) Region(ctx context.Context) (*string, error) {
 	var region Region
-	if err := makeRequest(info.endpoint, "info_region", nil, &region); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_region", nil, &region); err != nil {
 		return nil, err
 	}
 	return region.Region, nil
 }
 
-func (info info) Summary() (*Summary, error) {
+func (info info) Summary(ctx context.Context) (*Summary, error) {
 	var summary Summary
-	if err := makeRequest(info.endpoint, "info_summary", nil, &summary); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_summary", nil, &summary); err != nil {
 		return nil, err
 	}
 	return &summary, nil
 }
 
-func (info info) Version() (*string, error) {
+func (info info) Version(ctx context.Context) (*string, error) {
 	var version Version
-	if err := makeRequest(info.endpoint, "info_version", nil, &version); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "info_version", nil, &version); err != nil {
 		return nil, err
 	}
 	return &version.Version, nil
 }
 
-func makeRequest(endpoint string, method string, payload interface{}, result interface{}) error {
+func makeRequest(ctx context.Context, endpoint string, method string, payload interface{}, result interface{}) error {
 	req := jsonRPCRequest{
 		JSONRPC: "2.0",
 		ID:      rand.Intn(50000),
@@ -105,7 +106,7 @@ func makeRequest(endpoint string, method string, payload interface{}, result int
 		return err
 	}
 
-	httpReq, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(body))
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}
