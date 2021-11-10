@@ -35,7 +35,7 @@ type jsonRPCResponse struct {
 
 type P2PStatus struct {
 	Connected string
-	Diable    string
+	Dialable  string
 	Height    uint64
 	NatType   string `json:"nat_type"`
 }
