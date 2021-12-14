@@ -30,6 +30,7 @@ func New(endpoint string) *Client {
 	}
 }
 
+// Status calls info_p2p_status
 func (net p2p) Status(ctx context.Context) (*P2PStatus, error) {
 	var status P2PStatus
 	if err := makeRequest(ctx, net.endpoint, "info_p2p_status", nil, &status); err != nil {
@@ -38,6 +39,7 @@ func (net p2p) Status(ctx context.Context) (*P2PStatus, error) {
 	return &status, nil
 }
 
+// Height calls info_height and returns the miners latest height
 func (info info) Height(ctx context.Context) (uint64, error) {
 	var height MinerHeight
 	if err := makeRequest(ctx, info.endpoint, "info_height", nil, &height); err != nil {
@@ -46,6 +48,7 @@ func (info info) Height(ctx context.Context) (uint64, error) {
 	return height.Height, nil
 }
 
+// InConsensus calls info_height
 func (info info) InConsensus(ctx context.Context) (*InConsensus, error) {
 	var ic InConsensus
 	if err := makeRequest(ctx, info.endpoint, "info_height", nil, &ic); err != nil {
@@ -54,6 +57,7 @@ func (info info) InConsensus(ctx context.Context) (*InConsensus, error) {
 	return &ic, nil
 }
 
+// Name calls info_name
 func (info info) Name(ctx context.Context) (*string, error) {
 	var name Name
 	if err := makeRequest(ctx, info.endpoint, "info_name", nil, &name); err != nil {
@@ -62,6 +66,7 @@ func (info info) Name(ctx context.Context) (*string, error) {
 	return &name.Name, nil
 }
 
+// BlockAge calls info_block_age
 func (info info) BlockAge(ctx context.Context) (uint64, error) {
 	var blockAge BlockAge
 	if err := makeRequest(ctx, info.endpoint, "info_block_age", nil, &blockAge); err != nil {
@@ -70,6 +75,7 @@ func (info info) BlockAge(ctx context.Context) (uint64, error) {
 	return blockAge.Age, nil
 }
 
+// Region calls info_region
 func (info info) Region(ctx context.Context) (*string, error) {
 	var region Region
 	if err := makeRequest(ctx, info.endpoint, "info_region", nil, &region); err != nil {
@@ -78,6 +84,7 @@ func (info info) Region(ctx context.Context) (*string, error) {
 	return region.Region, nil
 }
 
+// Summary calls info_summary
 func (info info) Summary(ctx context.Context) (*Summary, error) {
 	var summary Summary
 	if err := makeRequest(ctx, info.endpoint, "info_summary", nil, &summary); err != nil {
@@ -86,6 +93,7 @@ func (info info) Summary(ctx context.Context) (*Summary, error) {
 	return &summary, nil
 }
 
+// Versin calls info_version
 func (info info) Version(ctx context.Context) (*string, error) {
 	var version Version
 	if err := makeRequest(ctx, info.endpoint, "info_version", nil, &version); err != nil {
