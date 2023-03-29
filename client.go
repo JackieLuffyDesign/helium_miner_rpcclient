@@ -78,7 +78,7 @@ func (info info) BlockAge(ctx context.Context) (uint64, error) {
 // Region calls info_region
 func (info info) Region(ctx context.Context) (*string, error) {
 	var region Region
-	if err := makeRequest(ctx, info.endpoint, "info_region", nil, &region); err != nil {
+	if err := makeRequest(ctx, info.endpoint, "region", nil, &region); err != nil {
 		return nil, err
 	}
 	return region.Region, nil
